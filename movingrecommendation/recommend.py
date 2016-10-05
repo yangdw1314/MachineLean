@@ -23,4 +23,17 @@ def sim_pearson(prefs,p1,p2):#prefs为评分数据集；p1,p2为评分比较id
         return 0
     r=num/den
     return r
+#返回最相似的前n个值
+def topMatch(prefs,item,n=5):
+    scores=[(sim_pearson(prefs, item, other),other)  for other in prefs  if other!=item]
+    scores.sort()
+    scores.reverse()
+    return scores[0:n]
+
+    
+    
+    
+    
+    
+    
     
