@@ -29,6 +29,24 @@ def topMatch(prefs,item,n=5):
     scores.sort()
     scores.reverse()
     return scores[0:n]
+#转换物品与人物数据集
+def transPrefs(prefs):
+    result={}
+    for person in prefs:
+        for item in prefs[person]:
+            result.setdefault(item,{})
+            result[item][person]=prefs[person][item]
+    return result
+#为每个物品构造一个最相近物品数据集
+def similarItem(prefs,n=10):
+    result={}
+    itemprefs=transPrefs(prefs)
+    for item in itemprefs:
+        scores=topMatch(prefs, item, n)
+        result[item]=scores
+    return result
+    
+    
 
     
     
