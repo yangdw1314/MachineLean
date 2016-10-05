@@ -45,6 +45,33 @@ def similarItem(prefs,n=10):
         scores=topMatch(prefs, item, n)
         result[item]=scores
     return result
+#获取推荐
+def getRecommend(prefs,itemmatch,user):#评分列表，相似物品数据集，当前用户id
+    userrat=prefs[user]
+    scores={}
+    totalsim={}
+    #循环遍历当前用户评分物品
+    for (item,rating) in userrat.items():
+        for (similar,item2) in itemmatch[item]:
+            if item2 in userrat:
+                continue
+            scores.setdefault(item2,0)
+            scores[item2]+=similar*rating
+            totalsim.setdefault(item2,0)
+            totalsim[item2]+=similar
+    rank=[(score/totalsim[item],item) for (item,score) in scores.items()]
+    rank.sort()
+    rank.reverse()
+    return rank
+    
+    
+
+
+
+
+
+
+
     
     
 
