@@ -18,13 +18,13 @@ def sim_pearson(prefs,p1,p2):#prefs为评分数据集；p1,p2为评分比较id
     psum =sum([prefs[p1][it]*prefs[p2][it] for it in si])
     #计算皮尔逊评价值
     num=psum-(sum1*sum2/n)
-    den=sqrt(sum1sq-pow(sum1,2)/n*sum2sq-pow(sum2,2)/n)
+    den=sqrt((sum1sq-pow(sum1,2)/n)*(sum2sq-pow(sum2,2)/n))
     if den==0:
         return 0
     r=num/den
     return r
 #返回最相似的前n个值
-def topMatch(prefs,item,n=5):
+def topMatch(prefs,item,n=3):
     scores=[(sim_pearson(prefs, item, other),other)  for other in prefs  if other!=item]
     scores.sort()
     scores.reverse()
@@ -38,15 +38,17 @@ def transPrefs(prefs):
             result[item][person]=prefs[person][item]
     return result
 #为每个物品构造一个最相近物品数据集
-def similarItem(prefs,n=10):
+def similarItem(prefs,n=3):
+   
     result={}
     itemprefs=transPrefs(prefs)
     for item in itemprefs:
-        scores=topMatch(prefs, item, n)
+        scores=topMatch(itemprefs, item, n)
         result[item]=scores
     return result
 #获取推荐
-def getRecommend(prefs,itemmatch,user):#评分列表，相似物品数据集，当前用户id
+def getRecommend(prefs,user):#评分列表，相似物品数据集，当前用户id
+    itemmatch=similarItem(prefs,n=3)
     userrat=prefs[user]
     scores={}
     totalsim={}
